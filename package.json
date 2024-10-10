@@ -5,12 +5,14 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.25.0"
+    "drizzle-kit": "^0.25.0",
+    "tsx": "^4.19.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.34.1",
     "pg": "^8.13.0"
   }
