@@ -1,20 +1,14 @@
 import * as dotenv from "dotenv";
-
-import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/connect";
 import { usersTable } from "./db/schema";
 
 dotenv.config({ path: "../.env" });
 
 async function main() {
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL!,
-  });
-  const db = drizzle(pool);
+  const db = await drizzle("node-postgres", process.env.DATABASE_URL!);
 
-  const test = await db.select().from(usersTable);
-  console.log(test);
+  const result = await db.select().from(usersTable);
+  console.log(result);
 }
 
 main();
