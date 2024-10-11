@@ -5,5 +5,5 @@ import getUser from "../controllers/getUser";
 
 const router = Router();
 
-router.post("/user", createUser);
+router.post("/createuser", createUser);
 router.get("/getuser", getUser);

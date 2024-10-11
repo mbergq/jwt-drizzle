@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use("/createuser", createUser);
 app.use("/getUser", getUser);
+
 const PORT = process.env.PORT || 5000;
 
 export const db = await drizzle("node-postgres", process.env.DATABASE_URL!);
