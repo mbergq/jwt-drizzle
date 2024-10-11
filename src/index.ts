@@ -4,7 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { drizzle } from "drizzle-orm/connect";
 
-import createUser from "./controllers/user";
+import createUser from "./controllers/createUser";
 import getUser from "./controllers/getUser";
 
 dotenv.config({ path: "../.env" });
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/user", createUser);
+app.use("/createuser", createUser);
 app.use("/getUser", getUser);
 const PORT = process.env.PORT || 5000;
 

@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { user } from "../db/schema";
+import { user } from "../db/schema.ts";
 import { db } from "../index.ts";
 
 const createUser = async (req: Request, res: Response) => {
