@@ -12,3 +12,5 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     res.status(401).json({ error: "Invalid token" });
   }
 };
+
+export default verifyToken;
