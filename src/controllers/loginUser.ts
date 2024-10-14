@@ -9,14 +9,14 @@ const loginUser = async (req: Request, res: Response) => {
   try {
     const { name, password }: { name: string; password: string } = req.body;
     const findUser = await db.select().from(user).where(eq(user.name, name));
-    if (!findUser) {
+    if (findUser.length === 0) {
       res.status(401).json({ error: "User not found" });
     }
     const matchPassword = await bcrypt.compare(password, findUser[0].password);
     if (!matchPassword) {
       res.status(401).json({ error: "Password is not correct" });
     }
-    const token = jwt.sign({ userId: user.id }, "your-secret-key", {
+    const token = jwt.sign({ userId: findUser[0].id }, "your-secret-key", {
       expiresIn: "1h",
     });
     res.status(200).json({
