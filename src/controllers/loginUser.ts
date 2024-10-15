@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 import { user } from "../db/schema";
 import { db } from "../index.ts";
 import { type Request, type Response } from "express";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 dotenv.config({ path: "../../.env" });
@@ -18,12 +17,10 @@ const loginUser = async (req: Request, res: Response) => {
     if (findUser.length === 0) {
       res.status(401).json({ error: "User not found" });
     }
-    // Bun.password.verify("awd", "argon2d");
     const matchPassword = await Bun.password.verify(
       password,
       findUser[0].password
     );
-    // const matchPassword = await bcrypt.compare(password, findUser[0].password);
     if (!matchPassword) {
       res.status(401).json({ error: "Password is not correct" });
     }

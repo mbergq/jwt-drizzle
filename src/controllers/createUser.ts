@@ -1,17 +1,12 @@
 import { type Request, type Response } from "express";
-import bcrypt from "bcrypt";
 import { user } from "../db/schema";
 import { db } from "../index.ts";
 
 const createUser = async (req: Request, res: Response) => {
   const { name, password }: { name: string; password: string } = req.body;
 
-  // Bun.password.hash("awd", "")
-  // Bun.password.hash("awd", "argon2d");
-  // Bun.password.verify("awd", "argon2d");
   try {
     const hashedPassword = await Bun.password.hash(password, "argon2d");
-    // const hashedPassword = await bcrypt.hash(password, 10);
     await db.insert(user).values({ userName: name, password: hashedPassword });
     res.status(201).json({ message: "A new user has been added" });
   } catch (error) {
