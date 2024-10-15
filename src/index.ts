@@ -1,11 +1,8 @@
-import { eq } from "drizzle-orm";
 import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { drizzle } from "drizzle-orm/connect";
-import { user } from "./db/schema.ts";
-import bcrypt from "bcrypt";
 
 import userRoutes from "./routes/user.ts";
 import protectedRoutes from "./routes/protected.ts";

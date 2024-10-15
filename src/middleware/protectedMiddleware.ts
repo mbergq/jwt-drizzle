@@ -6,6 +6,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   if (!token) return res.status(401).json({ error: "Access denied" });
   try {
     const decoded = jwt.verify(token, "your-secret-key");
+    console.log(decoded);
     req.body.userId = decoded;
     next();
   } catch (error) {
