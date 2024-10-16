@@ -9,7 +9,7 @@ export const user = pgTable("user", {
   ...timestamps,
 });
 
-export const refreshToken = pgTable("refreshtoken", {
+export const refreshToken = pgTable("refresh_token", {
   id: serial("id").primaryKey(),
   refreshToken: text("refresh_token").notNull(),
   userId: integer("user_id")

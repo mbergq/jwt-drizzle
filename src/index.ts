@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import { drizzle } from "drizzle-orm/connect";
 
 import userRoutes from "./routes/user.ts";
-// import protectedRoutes from "./routes/protected.ts";
+import cookieParser from "cookie-parser";
 
 dotenv.config({ path: "../.env" });
 const app = express();
@@ -19,9 +19,9 @@ app.use(
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use("/auth", userRoutes);
-// app.use("/protected", protectedRoutes);
 
 const PORT = process.env.PORT;
 

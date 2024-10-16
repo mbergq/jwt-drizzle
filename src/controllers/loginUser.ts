@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import { eq } from "drizzle-orm";
 import { user } from "../db/schema";
-import { refreshToken } from "../db/schema";
+import { refreshToken as refreshTokenTable } from "../db/schema";
 import { db } from "../index.ts";
 import { type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
@@ -25,25 +25,25 @@ const loginUser = async (req: Request, res: Response) => {
     if (!matchPassword) {
       res.status(401).json({ error: "Password is not correct" });
     }
-    const createAccessToken = jwt.sign(
+    const accessToken = jwt.sign(
       { userId: findUser[0].id },
       process.env.ACCESS_TOKEN_SECRET!,
       {
         expiresIn: "15m",
       }
     );
-    const createRefreshToken = jwt.sign(
+    const refreshToken = jwt.sign(
       { userId: findUser[0].id },
       process.env.REFRESH_TOKEN_SECRET!,
       { expiresIn: "1h" }
     );
-    res.cookie("jwt", createAccessToken, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.cookie("jwt", createRefreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
@@ -51,15 +51,17 @@ const loginUser = async (req: Request, res: Response) => {
     });
     // Add refreshtoken to database
     await db
-      .insert(refreshToken)
-      .values({ userId: findUser[0].id, refreshToken: createRefreshToken });
+      .insert(refreshTokenTable)
+      .values({ userId: findUser[0].id, refreshToken: refreshToken });
     res.status(200).json({
       user: findUser[0].userName,
-      createAccessToken,
-      createRefreshToken,
+      accessToken,
+      refreshToken,
       message: "You are logged in",
     });
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({ error: "Login failed" });
   }
 };

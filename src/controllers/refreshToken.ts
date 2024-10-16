@@ -8,18 +8,17 @@ import { user } from "../db/schema";
 dotenv.config({ path: "../../.env" });
 
 const refreshAccessToken = async (req: Request, res: Response) => {
-  const incomingRefreshToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTcyOTA2MDM1MiwiZXhwIjoxNzI5MDYzOTUyfQ.hzeMtRfwIU24IPejDnLUABUbreN7EMve5CO-uDhKMyU";
-  // req.cookies.createRefreshToken || req.body.createRefreshToken;
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
 
-  if (!incomingRefreshToken) {
+  if (!refreshToken) {
     return res.status(401).json({ message: "Refresh token not found" });
   }
 
   try {
     const decodeToken = () => {
       const decodedToken = jwt.verify(
-        incomingRefreshToken,
+        refreshToken,
         process.env.REFRESH_TOKEN_SECRET!
       );
 
@@ -29,7 +28,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
       };
     };
     const decodedToken = jwt.verify(
-      incomingRefreshToken,
+      refreshToken,
       process.env.REFRESH_TOKEN_SECRET!
     );
 
