@@ -9,15 +9,15 @@ dotenv.config({ path: "../../.env" });
 
 const refreshAccessToken = async (req: Request, res: Response) => {
   const accessToken = req.cookies.accessToken;
-  const refreshToken = req.cookies.refreshToken;
+  const incomingRefreshToken = req.cookies.refreshToken;
 
-  if (!refreshToken) {
+  if (!incomingRefreshToken) {
     return res.status(401).json({ message: "Refresh token not found" });
   }
 
   try {
     const decodedToken = jwt.verify(
-      refreshToken,
+      incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET!
     );
 
@@ -31,14 +31,14 @@ const refreshAccessToken = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Refresh token is incorrect" });
     }
 
-    const createAccessToken = jwt.sign(
+    const accessToken = jwt.sign(
       { userId: findUser[0].id },
       process.env.ACCESS_TOKEN_SECRET!,
       {
         expiresIn: "15m",
       }
     );
-    const createRefreshToken = jwt.sign(
+    const refreshToken = jwt.sign(
       { userId: findUser[0].id },
       process.env.REFRESH_TOKEN_SECRET!,
       { expiresIn: "1h" }
@@ -46,21 +46,21 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .cookie("jwt", createAccessToken, {
+      .cookie("accesstoken", accessToken, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .cookie("jwt", createRefreshToken, {
+      .cookie("refreshtoken", refreshToken, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({
-        createAccessToken,
-        createRefreshToken,
+        accessToken,
+        refreshToken,
         message: "Access token refreshed",
       });
   } catch (error) {
