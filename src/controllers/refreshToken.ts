@@ -16,17 +16,6 @@ const refreshAccessToken = async (req: Request, res: Response) => {
   }
 
   try {
-    const decodeToken = () => {
-      const decodedToken = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET!
-      );
-
-      return {
-        //@ts-expect-error missing
-        userId: decodedToken.userId as string,
-      };
-    };
     const decodedToken = jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET!
@@ -35,6 +24,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
     const findUser = await db
       .select()
       .from(user)
+      //@ts-expect-error missing
       .where(eq(user.id, decodedToken.userId));
 
     if (!findUser) {
