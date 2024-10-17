@@ -46,13 +46,13 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .cookie("accesstoken", accessToken, {
+      .cookie("accessToken", accessToken, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .cookie("refreshtoken", refreshToken, {
+      .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
