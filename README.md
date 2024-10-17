@@ -1,4 +1,4 @@
-# s-notes
+# jwt-drizzle
 
 To install dependencies:
 
